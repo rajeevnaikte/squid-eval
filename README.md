@@ -23,7 +23,7 @@ console.log(evaluator.execute('Toronto Rule', {
 # Syntax
 Only two things to know
 - Variables are to be put within square brackets. e.g. [day of birth]
-- It need to use operator symbols or square brackets as text to be compared, 
+- If need to use operator symbols or square brackets as text to be compared, 
 then just put it in side single quotes. e.g. [formula] = '2 + [3]'.
 And to use quote inside quoted text, jsut use it twice. e.g. [name] = 'Macy''s'
 
