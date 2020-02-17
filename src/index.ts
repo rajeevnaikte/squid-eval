@@ -60,6 +60,14 @@ defaultOperators.set('!=', {
     priority: 1,
     operate: (left: any, right: any) => (toNumIf(left) !== toNumIf(right))
   });
+defaultOperators.set('>', {
+  priority: 1,
+  operate: (left: any, right: any) => (toNumIf(left) > toNumIf(right))
+});
+defaultOperators.set('<', {
+  priority: 1,
+  operate: (left: any, right: any) => (toNumIf(left) < toNumIf(right))
+});
 defaultOperators.set(' contains ', {
     priority: 1,
     operate: (left: any, right: any) => {
@@ -118,6 +126,13 @@ export default class RuleEvaluator {
 
   clearOperators() {
     this.operators.clear();
+    this.updateOpsRegex();
+  }
+
+  changeOperatorSymbol(currentSymbol: string, newSymbol: string, keepCurrent: boolean = false) {
+    if (!this.operators.has(currentSymbol)) throw `Operator ${currentSymbol} doesn't exist.`;
+    this.operators.set(newSymbol, <Operator>this.operators.get(currentSymbol));
+    if (!keepCurrent) this.operators.delete(currentSymbol);
     this.updateOpsRegex();
   }
 

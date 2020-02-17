@@ -52,7 +52,7 @@ describe('rules eval test', () => {
 
   test('math and condition', () => {
     const ruleName = 'math and condition';
-    evaluator.parse(ruleName, '((2 + [day of birth]/2 - 1)*2 = 25) or ([state] = CA)');
+    evaluator.parse(ruleName, '((2 + [day of birth]/2 - 1)*2 > 24) or ([state] = CA)');
     expect(evaluator.execute(ruleName, data)).toBe(true);
   });
 });
