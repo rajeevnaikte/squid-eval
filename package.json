@@ -1,0 +1,38 @@
+{
+  "name": "squid-eval",
+  "version": "1.0.0",
+  "description": "Customizable expression/rule evaluator",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajeevnaikte/squid-eval.git"
+  },
+  "keywords": [
+    "expression",
+    "rule",
+    "evaluator",
+    "engine"
+  ],
+  "author": "Rajeev N",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rajeevnaikte/squid-eval/issues"
+  },
+  "homepage": "https://github.com/rajeevnaikte/squid-eval#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^25.1.2",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}
