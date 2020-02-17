@@ -1,6 +1,7 @@
 # squid-eval
 - Simple expression/rule evaluator with minimal syntax.
 - Write expression in natural language.
+- Write conditional logic or math calculation or both.
 - Easily use in front-end or back-end.
 - It will reduce the coding effort, logic can be written as Json or DB data.
 - Can use this to show a conditional content/input-field on UI.
