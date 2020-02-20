@@ -213,7 +213,10 @@ export default class RuleEvaluator {
           res.push(stack.pop());
         }
         if (stack.length == 0 || stack[stack.length - 1] === '(') {
-          throw `${exp} is not a valid expression.`;
+          throw {
+            code: 'INVALID_EXP',
+            message: `Expression is not a valid expression.`
+          }
         }
         stack.pop();
       } else {
@@ -235,7 +238,10 @@ export default class RuleEvaluator {
    */
   parse(ruleName: string | number, rule: string) {
     if (this.prefixExp.has(ruleName)) {
-      throw `Rule name ${ruleName} already exists. Please use other name or call updateRule method.`;
+      throw {
+        code: 'RULE_EXISTS',
+        message: `Rule name ${ruleName} already exists. Please use other name or call updateRule method.`
+      }
     }
     this.update(ruleName, rule);
   }
@@ -264,7 +270,10 @@ export default class RuleEvaluator {
       // @ts-ignore
       return this.getFields(this.prefixExp.get(ruleName));
     } else {
-      throw `Rule name ${ruleName} not saved. Please call preProcess method first.`;
+      throw {
+        code: 'RULE_NOT_EXIST',
+        message: `Rule name ${ruleName} not saved. Please call preProcess method first.`
+      }
     }
   }
 
@@ -289,7 +298,7 @@ export default class RuleEvaluator {
           right = this.execOp(left, stack.pop().operator, right);
         } while (stack.length > 0 && !stack[stack.length - 1].operator);
         if (stack.length === 0) return right;
-        stack.push({ other: right });
+        stack.push({other: right});
       }
     }
   }
@@ -299,6 +308,9 @@ export default class RuleEvaluator {
       // @ts-ignore
       return this.evaluateRule(this.prefixExp.get(ruleName), data);
     }
-    throw `${ruleName} doesn't exist. Please call parse.`;
+    throw {
+      code: 'RULE_NOT_EXIST',
+      message: `${ruleName} doesn't exist. Please call parse.`
+    }
   }
 }
