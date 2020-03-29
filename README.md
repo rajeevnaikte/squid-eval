@@ -5,7 +5,7 @@ Writing logics in natural language way.
 - Write expression in natural language.
 - Write conditional logic or math calculation or both.
 - Easily use in front-end or back-end.
-- It will reduce the coding effort, logic can be written as Json or DB data.
+- Reduce the coding effort with the logic written as Json or DB data.
 - Can use this to show a conditional content/input-field on UI.
 - Customize operators symbols.
 
@@ -36,9 +36,13 @@ console.log(evaluator.execute('Toronto Rule', {
 # Syntax
 Only two things to know
 - Variables are to be put within square brackets. e.g. [day of birth]
-- If need to use operator symbols or square brackets as text to be compared, 
+- If need to use operator symbols or square brackets as a plain text,
 then just put it in side single quotes. e.g. [formula] = '2 + [3]'.
-And to use quote inside quoted text, jsut use it twice. e.g. [name] = 'Macy''s'
+And to use quote inside quoted text, just use it twice. e.g. [name] = 'Macy''s'
+
+# Validation
+- Call parse() method which will throw error if expression has issue.
+- Call getVariables() and check if the required variables are extracted.
 
 # Customizing operators
 Default operators available are: +, -, *, /, =, !=, >, <, and, or, contains
