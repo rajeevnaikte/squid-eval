@@ -8,6 +8,8 @@
     "lib/**/*"
   ],
   "scripts": {
+    "lint": "eslint 'src/**/*.{ts,js}'",
+    "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "test": "jest",
     "build": "tsc"
   },

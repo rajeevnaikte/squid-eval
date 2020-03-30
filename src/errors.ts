@@ -1,10 +1,13 @@
 class BaseError extends Error {
-  readonly code: string
+  readonly code: string;
 
   constructor (code: string, message: string) {
-    super();
+    super(message);
     this.code = code;
-    this.message = message;
+  }
+
+  toString (): string {
+    return `${this.code}: ${this.message}`;
   }
 }
 
