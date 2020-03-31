@@ -1,6 +1,6 @@
 {
   "name": "squid-eval",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Customizable expression/rule evaluator",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,8 @@
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
