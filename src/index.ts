@@ -8,7 +8,7 @@
     Variables are to be put between square brackets (can have spaces). e.g. [my variable name]
 */
 import { TextPatterns } from './TextParser';
-import { InvalidExpError, RuleExistsError, RuleNotExistsError } from "./errors";
+import { InvalidExpError, NullObjectError, RuleExistsError, RuleNotExistsError } from './errors';
 
 type RuleName = string | number;
 
@@ -19,6 +19,13 @@ const textPattern: TextPatterns = {
     subText: '\'\'',
     replacement: '\''
   }]
+};
+
+const getNonNull = <T>(object: T): NonNullable<T> => {
+  if (object !== undefined && object !== null) {
+    return object as NonNullable<T>;
+  }
+  throw new NullObjectError();
 };
 
 const toNumIf = (val: any) => {
@@ -34,8 +41,7 @@ interface Operator {
   operate: (left: string, right: string) => any;
 }
 
-interface Operators extends Map<string, Operator> {
-}
+type Operators = Map<string, Operator>
 
 const defaultOperators: Operators = new Map();
 
@@ -132,7 +138,7 @@ export default class RuleEvaluator {
     this.updateOpsRegex();
   }
 
-  changeOperatorSymbol (currentSymbol: string, newSymbol: string, keepCurrent: boolean = false) {
+  changeOperatorSymbol (currentSymbol: string, newSymbol: string, keepCurrent = false) {
     if (!this.operators.has(currentSymbol)) throw `Operator ${currentSymbol} doesn't exist.`;
     this.operators.set(newSymbol, <Operator>this.operators.get(currentSymbol));
     if (!keepCurrent) this.operators.delete(currentSymbol);
@@ -154,37 +160,36 @@ export default class RuleEvaluator {
 
   private isOp = (str: string) => {
     return this.getOps().includes(str.toLowerCase());
-  }
+  };
 
   private execOp (left: string, op: string, right: string) {
-    // @ts-ignore
-    return this.operators.get(op).operate(left, right);
+    return this.operators.get(op)?.operate(left, right);
   }
 
   private splitParts (exp: string): RuleExpPart[] {
     const parts: RuleExpPart[] = [];
     let matches: any;
-    for (let item of exp.split(textPattern.split)) {
+    for (const item of exp.split(textPattern.split)) {
       matches = textPattern.extract.exec(item);
       if (matches) {
         let text: string = matches[1];
         textPattern.replace?.forEach(rep => {
           text = text.replace(new RegExp(rep.subText, 'g'), rep.replacement);
         });
-        parts.push({text});
+        parts.push({ text });
       } else {
-        for (let varPart of item.split(this.variablePattern.split)) {
+        for (const varPart of item.split(this.variablePattern.split)) {
           matches = this.variablePattern.extract.exec(varPart);
           if (matches) {
-            parts.push({variable: matches[1]});
+            parts.push({ variable: matches[1] });
           } else {
             for (let part of varPart.split(this.opsRegex)) {
               if (this.isOp(part)) {
-                parts.push({operator: part});
+                parts.push({ operator: part });
               } else {
                 part = part.trim();
                 if (part.length > 0) {
-                  parts.push({other: part});
+                  parts.push({ other: part });
                 }
               }
             }
@@ -200,20 +205,18 @@ export default class RuleEvaluator {
     const parts: RuleExpPart[] = this.splitParts(exp);
     const stack: RuleExpPart[] = [];
     for (let i = parts.length - 1; i >= 0; i--) {
-      let partObj = parts[i];
+      const partObj = parts[i];
       if (partObj.operator) {
-        let part = partObj.operator.toLowerCase();
+        const part = partObj.operator.toLowerCase();
         while (stack.length > 0 && stack[stack.length - 1].operator && this.getPriority(stack[stack.length - 1].operator || '') < this.getPriority(part)) {
-          // @ts-ignore
-          res.push(stack.pop());
+          res.push(getNonNull(stack.pop()));
         }
         stack.push(partObj);
       } else if (partObj.other === ')') {
         stack.push(partObj);
       } else if (partObj.other === '(') {
         while (stack.length > 0 && ![')', '('].includes(stack[stack.length - 1].other || '')) {
-          // @ts-ignore
-          res.push(stack.pop());
+          res.push(getNonNull(stack.pop()));
         }
         if (stack.length == 0 || stack[stack.length - 1] === '(') {
           throw new InvalidExpError(exp);
@@ -225,12 +228,11 @@ export default class RuleEvaluator {
     }
 
     if (stack.find(expPart => [')', '('].includes(expPart.other || ''))) {
-      throw new InvalidExpError(exp)
+      throw new InvalidExpError(exp);
     }
 
     while (stack.length > 0) {
-      // @ts-ignore
-      res.push(stack.pop());
+      res.push(getNonNull(stack.pop()));
     }
     return res.reverse();
   }
@@ -260,8 +262,8 @@ export default class RuleEvaluator {
       const dummyData = this.getFields(processedExp)
         .reduce((obj: any, variable: string) => {
           obj[variable] = '1';
-          return obj
-        }, {})
+          return obj;
+        }, {});
       this.evaluateRule(processedExp, dummyData);
     } catch (e) {
       throw new InvalidExpError(newRule);
@@ -271,8 +273,7 @@ export default class RuleEvaluator {
   }
 
   private getFields (prefixExp: RuleExpPart[]): string[] {
-    // @ts-ignore
-    return prefixExp.filter(item => item.variable).map(item => item.variable);
+    return prefixExp.filter(item => item.variable).map(item => item.variable as string);
   }
 
   /**
@@ -280,9 +281,9 @@ export default class RuleEvaluator {
    * @param ruleName
    */
   getVariables (ruleName: RuleName) {
-    if (this.prefixExp.has(ruleName)) {
-      // @ts-ignore
-      return this.getFields(this.prefixExp.get(ruleName));
+    const ruleExpParts = this.prefixExp.get(ruleName)
+    if (ruleExpParts) {
+      return this.getFields(ruleExpParts);
     } else {
       throw new RuleNotExistsError(ruleName);
     }
@@ -292,34 +293,35 @@ export default class RuleEvaluator {
     if (part.variable) {
       return data[part.variable];
     }
-    return part.other || part.text;
+    return part.other ?? part.text;
   }
 
   private evaluateRule (prefixExp: RuleExpPart[], data: any) {
     const stack: RuleExpPart[] = [];
-    for (let item of prefixExp) {
+    for (const item of prefixExp) {
       if (item.operator || stack[stack.length - 1].operator) {
         stack.push(item);
       } else {
         let left, right = this.getValue(item, data);
         do {
-          // @ts-ignore
-          left = this.getValue(stack.pop(), data);
-          // @ts-ignore
-          right = this.execOp(left, stack.pop().operator, right);
+          left = this.getValue(getNonNull(stack.pop()), data);
+
+          right = this.execOp(left, getNonNull(stack.pop()?.operator), right);
         } while (stack.length > 0 && !stack[stack.length - 1].operator);
+
         if (stack.length === 0) return right;
-        stack.push({other: right});
+
+        stack.push({ other: right });
       }
     }
     throw new InvalidExpError('');
   }
 
   execute (ruleName: RuleName, data: any) {
-    if (this.prefixExp.has(ruleName)) {
+    const prefixExp = this.prefixExp.get(ruleName);
+    if (prefixExp) {
       try {
-        // @ts-ignore
-        return this.evaluateRule(this.prefixExp.get(ruleName), data);
+        return this.evaluateRule(prefixExp, data);
       } catch (e) {
         throw new InvalidExpError(`with rule name: '${ruleName}'`);
       }

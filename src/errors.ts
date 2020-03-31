@@ -11,6 +11,12 @@ class BaseError extends Error {
   }
 }
 
+export class NullObjectError extends BaseError {
+  constructor () {
+    super('NULL_OBJECT', 'null or undefined object found when expected a value');
+  }
+}
+
 export class InvalidExpError extends BaseError {
   constructor (exp: string) {
     super('INVALID_EXP', `Expression ${exp} is not valid.`);

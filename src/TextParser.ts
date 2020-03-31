@@ -2,8 +2,8 @@ export interface TextPatterns {
   split: RegExp;
   extract: RegExp;
   replace?: {
-    subText: string,
-    replacement: string
+    subText: string;
+    replacement: string;
   }[];
 }
 
@@ -27,15 +27,15 @@ export const and = (...regExps: string[]): string => {
   return regExps.filter(str => str.length > 0).join('');
 }
 
-export const contains = (regExp: string, count: string = '*'): string => {
+export const contains = (regExp: string, count = '*'): string => {
   return `(?:${regExp})`;
 }
 
-export const notContains = (regExp: string, count: string = '*'): string => {
+export const notContains = (regExp: string, count = '*'): string => {
   return `(?!${regExp})`;
 }
 
-export const buildTextPatterns = (startsWith: string, endsWith: string, allow: string = ''): TextPatterns => {
+export const buildTextPatterns = (startsWith: string, endsWith: string, allow = ''): TextPatterns => {
   const start = escape(startsWith);
   const end = escape(endsWith);
   const negOr = contains(or(notContains(contains(or(start, end))), allow));
@@ -50,7 +50,7 @@ export class TextBetween {
   readonly endsWith: string;
   readonly allow?: string;
 
-  constructor(startsWith: string, endsWith: string = ' ', allow?: string) {
+  constructor(startsWith: string, endsWith = ' ', allow?: string) {
     this.startsWith = startsWith;
     this.endsWith = endsWith;
     this.allow = allow;
