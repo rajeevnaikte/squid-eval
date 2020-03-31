@@ -9,8 +9,7 @@
 */
 import { TextPatterns } from './TextParser';
 import { InvalidExpError, NullObjectError, RuleExistsError, RuleNotExistsError } from './errors';
-
-type RuleName = string | number;
+import { RuleName } from './types';
 
 const textPattern: TextPatterns = {
   split: /('(?:[^']|'')*')/g,
@@ -112,7 +111,7 @@ export default class RuleEvaluator {
     split: /(\[(?:[^[\]])*\])/g,
     extract: /\[((?:[^[\]])*)\]/g
   };
-  private prefixExp: Map<string | number, RuleExpPart[]> = new Map<string | number, RuleExpPart[]>();
+  private prefixExp: Map<RuleName, RuleExpPart[]> = new Map<string | number, RuleExpPart[]>();
 
   constructor () {
     this.operators = new Map(defaultOperators);
@@ -323,7 +322,7 @@ export default class RuleEvaluator {
       try {
         return this.evaluateRule(prefixExp, data);
       } catch (e) {
-        throw new InvalidExpError(`with rule name: '${ruleName}'`);
+        throw new InvalidExpError(`with rule name: '${String(ruleName)}'`);
       }
     }
     throw new RuleNotExistsError(ruleName);

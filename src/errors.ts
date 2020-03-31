@@ -1,3 +1,5 @@
+import { RuleName } from './types';
+
 class BaseError extends Error {
   readonly code: string;
 
@@ -24,13 +26,13 @@ export class InvalidExpError extends BaseError {
 }
 
 export class RuleExistsError extends BaseError {
-  constructor (ruleName: string | number) {
-    super('RULE_EXISTS', `Rule name ${ruleName} already exists. Please use other name or call updateRule method.`);
+  constructor (ruleName: RuleName) {
+    super('RULE_EXISTS', `Rule name ${String(ruleName)} already exists. Please use other name or call updateRule method.`);
   }
 }
 
 export class RuleNotExistsError extends BaseError {
-  constructor (ruleName: string | number) {
-    super('RULE_NOT_EXISTS', `${ruleName} doesn't exist. Please call parse.`);
+  constructor (ruleName: RuleName) {
+    super('RULE_NOT_EXISTS', `${String(ruleName)} doesn't exist. Please call parse.`);
   }
 }
