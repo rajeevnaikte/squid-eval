@@ -1,5 +1,5 @@
 # squid-eval
-Writing logics in natural language way. 
+Writing logic in natural language way. 
 (Could use eval() function of JS, but it can lead to code injection)
 - Simple expression/rule evaluator with minimal syntax.
 - Write expression in natural language.
@@ -10,7 +10,7 @@ Writing logics in natural language way.
 - Customize operators symbols.
 
 # How it works
-```
+```javascript 1.8
 import RuleEvaluator from 'squid-eval'
 
 const evaluator = new RuleEvaluator();
@@ -24,7 +24,7 @@ console.log(evaluator.execute('Toronto Rule', {
 // output will be true
 ```
 Handles parenthesized expressions as well.
-```
+```javascript 1.8
 evaluator.parse('Toronto 2nd Rule', "[city] = Toronto and ([day of birth] + 10 < 20 or [name] = Wendy's)");
 console.log(evaluator.execute('Toronto Rule', {
     city: 'Toronto',
