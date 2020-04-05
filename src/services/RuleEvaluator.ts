@@ -91,7 +91,7 @@ interface RuleExpPart {
 
 export default class RuleEvaluator {
   private operators: Operators;
-  private opsRegex: RegExp = / /g;
+  private opsRegex = / /g;
   private variablePattern: TextPatterns = {
     split: /(\[(?:[^[\]])*\])/g,
     extract: /\[((?:[^[\]])*)\]/g
