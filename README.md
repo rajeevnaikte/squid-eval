@@ -11,7 +11,7 @@ Writing logic in natural language way.
 
 # How it works
 ```javascript 1.8
-import RuleEvaluator from 'squid-eval'
+import { RuleEvaluator } from 'squid-eval'
 
 const evaluator = new RuleEvaluator();
 evaluator.parse('Toronto Rule', "[city] = Toronto and [day of birth] > 20 or [name] = Wendy's");
