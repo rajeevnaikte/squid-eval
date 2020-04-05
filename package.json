@@ -1,6 +1,6 @@
 {
   "name": "squid-eval",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Customizable expression/rule evaluator",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -30,7 +30,9 @@
     "url": "https://github.com/rajeevnaikte/squid-eval/issues"
   },
   "homepage": "https://github.com/rajeevnaikte/squid-eval#readme",
-  "dependencies": {},
+  "dependencies": {
+    "squid-utils": "^1.1.0"
+  },
   "devDependencies": {
     "@types/jest": "^25.1.2",
     "@typescript-eslint/eslint-plugin": "^2.25.0",

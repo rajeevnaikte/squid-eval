@@ -1,5 +1,5 @@
-import RuleEvaluator from "../index";
-import { InvalidExpError, RuleExistsError } from "../errors";
+import RuleEvaluator from "../RuleEvaluator";
+import { InvalidExpError, RuleExistsError, RuleNotExistsError } from '../../errors';
 
 describe('rules eval test', () => {
   const evaluator = new RuleEvaluator();
@@ -55,6 +55,12 @@ describe('rules eval test', () => {
       const variables = evaluator.getVariables(ruleName);
       expect(variables).toStrictEqual(['day of birth', 'state']);
     });
+
+    test('delete', () => {
+      const ruleName = 'texas state and county San Hose';
+      evaluator.delete(ruleName);
+      expect(() => evaluator.execute(ruleName, {})).toThrow(new RuleNotExistsError(ruleName));
+    });
   });
 
   describe('error scenarios', () => {
@@ -67,12 +73,12 @@ describe('rules eval test', () => {
       const ruleName = 'expression error';
       const exp = '(2 + [day of birth]/2 - 1)*2 > 24) or [state] = CA)';
       expect(() => evaluator.parse(ruleName, exp)).toThrow(new InvalidExpError(exp));
-    })
+    });
 
     test('expression error operators', () => {
       const ruleName = 'expression error operators';
       const exp = ' and ((2 + [day of birth]/2 - 1)*2 > 24) or ([state] = CA)';
       expect(() => evaluator.parse(ruleName, exp)).toThrow(new InvalidExpError(exp));
-    })
+    });
   });
 });
