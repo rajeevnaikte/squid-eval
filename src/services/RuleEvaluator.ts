@@ -91,8 +91,7 @@ interface RuleExpPart {
 
 export default class RuleEvaluator {
   private operators: Operators;
-  // @ts-ignore
-  private opsRegex: RegExp;
+  private opsRegex: RegExp = / /g;
   private variablePattern: TextPatterns = {
     split: /(\[(?:[^[\]])*\])/g,
     extract: /\[((?:[^[\]])*)\]/g
@@ -125,7 +124,7 @@ export default class RuleEvaluator {
 
   changeOperatorSymbol (currentSymbol: string, newSymbol: string, keepCurrent = false) {
     if (!this.operators.has(currentSymbol)) throw `Operator ${currentSymbol} doesn't exist.`;
-    this.operators.set(newSymbol, <Operator>this.operators.get(currentSymbol));
+    this.operators.set(newSymbol, this.operators.get(currentSymbol) as Operator);
     if (!keepCurrent) this.operators.delete(currentSymbol);
     this.updateOpsRegex();
   }
