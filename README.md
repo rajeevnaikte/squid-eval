@@ -52,3 +52,22 @@ Want to add more of your own? Below are the APIs can be used.
 - deleteOperator() to delete an operator
 - clearOperators() to delete all the operators
 - changeOperatorSymbol() to change symbol of an existing operator. e.g. say you don't like to use '=', instead would prefer using 'is' as in a rule '[city] is Toronto'
+
+# Rule Action Service
+Optional service to evaluate rules and find actions to take.
+- RuleActionService:
+  - add (ruleName, action: string, rule: string)
+  - update (ruleName, action: string, rule: string)
+  - delete (ruleName, action: string)
+  - evaluateActions (ruleName, formData: JsonType): string[]<br/>
+    Returns list of actions to be taken based on rules setup.
+<br/>
+```javascript 1.8
+import { RuleActionService } from 'squid-eval';
+
+const inputFieldActionsService = new RuleActionService();
+inputFieldActionsService.add('underAgeDisclaimer', 'show', '[age] < 18');
+
+const formData = { age: 16 };
+inputFieldActionsService.evaluateActions('underAgeDisclaimer', formData); // ['show']
+```
