@@ -63,7 +63,7 @@ Optional service to evaluate rules and find actions to take.
     Returns list of actions, to be taken based on rules setup for given rule name.
   - evaluateAll (data: JsonType): Map\<RuleName, string[]><br/>
     Return list of actions to be taken on each of the saved rule names.
-<br/>
+
 ```javascript 1.8
 import { RuleActionService } from 'squid-eval';
 
@@ -72,5 +72,6 @@ inputFieldActionsService.add('underAgeDisclaimer', 'show', '[age] < 18');
 inputFieldActionsService.add('underAgeDisclaimer', 'block-user', '[age] < 16');
 
 const formData = { age: 15 };
-inputFieldActionsService.evaluate('underAgeDisclaimer', formData); // ['show', 'block-user']
+inputFieldActionsService.evaluate('underAgeDisclaimer', formData);
+// output will be ['show', 'block-user']
 ```
