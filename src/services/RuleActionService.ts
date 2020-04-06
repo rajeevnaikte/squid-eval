@@ -76,18 +76,33 @@ export default class RuleActionService {
   /**
    * Execute rules with given data and find actions.
    */
-  evaluateActions (ruleName: RuleName, formData: JsonType): string[] {
+  evaluate (ruleName: RuleName, data: JsonType): string[] {
     const actionRules = this.ruleNameActionRules.get(ruleName);
     const actions: string[] = [];
 
     if (actionRules) {
       for (const actionRule of actionRules) {
-        if (this.ruleEvaluator.execute(actionRule.ruleName, formData)) {
+        if (this.ruleEvaluator.execute(actionRule.ruleName, data)) {
           actions.push(actionRule.action);
         }
       }
     }
 
     return actions;
+  }
+
+  /**
+   * Evaluate all rules of all rule-names. Returns Map of rule-name and evaluated actions.
+   * @param data
+   */
+  evaluateAll (data: JsonType): Map<RuleName, string[]> {
+    const ruleNameActions = new Map<RuleName, string[]>();
+
+    this.ruleNameActionRules
+      .forEach((actionRule, ruleName) => {
+        ruleNameActions.set(ruleName, this.evaluate(ruleName, data));
+      });
+
+    return ruleNameActions;
   }
 }

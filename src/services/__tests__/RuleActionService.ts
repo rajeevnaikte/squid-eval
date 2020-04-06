@@ -1,5 +1,6 @@
 import RuleActionService from '../RuleActionService';
 import { ActionFoundError } from '../../errors';
+import { RuleName } from '../../types';
 
 describe('RuleActionService', () => {
   const inputActionRules = new RuleActionService();
@@ -48,7 +49,7 @@ describe('RuleActionService', () => {
     expect(inputNameActionRules.get(inputName)).toBeUndefined();
   });
 
-  describe('evaluateActions', () => {
+  describe('evaluate', () => {
     const inputName = 'extension2';
     const action = 'show';
     const data = {
@@ -58,25 +59,33 @@ describe('RuleActionService', () => {
     inputActionRules.add(inputName, action, '[country code] > 0 and [phone number] > 0');
 
     test('no actions', () => {
-      const actions = inputActionRules.evaluateActions(inputName, data);
+      const actions = inputActionRules.evaluate(inputName, data);
       expect(actions).toEqual([]);
     });
 
     test('one action', () => {
       data['country code'] = 1;
-      const actions = inputActionRules.evaluateActions(inputName, data);
+      const actions = inputActionRules.evaluate(inputName, data);
       expect(actions).toEqual(['show']);
     });
 
     test('unknown input name', () => {
-      const actions = inputActionRules.evaluateActions('unknown input', data);
+      const actions = inputActionRules.evaluate('unknown input', data);
       expect(actions).toEqual([]);
     });
 
     test('two actions', () => {
       inputActionRules.add(inputName, 'change', '[phone number] > 2000');
-      const actions = inputActionRules.evaluateActions(inputName, data);
+      const actions = inputActionRules.evaluate(inputName, data);
       expect(actions).toEqual(['show', 'change']);
+    });
+
+    test('evaluate all', () => {
+      inputActionRules.add('extension1', 'show', '[country code] > -1 and [phone number] > 0');
+      const expected = new Map<RuleName, string[]>();
+      expected.set('extension1', ['show']);
+      expected.set('extension2', ['show', 'change']);
+      expect(inputActionRules.evaluateAll(data)).toEqual(expected);
     });
   });
 });
