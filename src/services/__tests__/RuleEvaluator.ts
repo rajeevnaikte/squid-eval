@@ -43,13 +43,13 @@ describe('rules eval test', () => {
 
     test('math operations', () => {
       const ruleName = 'math';
-      evaluator.parse(ruleName, '(2 + [day of birth]/2 - 1)*2');
+      evaluator.parse(ruleName, '(2 + [day of birth] / 2 - 1) * 2');
       expect(evaluator.execute(ruleName, data)).toBe(25);
     });
 
     test('math and condition', () => {
       const ruleName = 'math and condition';
-      evaluator.parse(ruleName, '((2 + [day of birth]/2 - 1)*2 > 24) or ([state] = CA)');
+      evaluator.parse(ruleName, '((2 + [day of birth] / 2 - 1) * 2 > 24) or ([state] = CA)');
       expect(evaluator.execute(ruleName, data)).toBe(true);
 
       const variables = evaluator.getVariables(ruleName);
@@ -71,13 +71,13 @@ describe('rules eval test', () => {
 
     test('expression error', () => {
       const ruleName = 'expression error';
-      const exp = '(2 + [day of birth]/2 - 1)*2 > 24) or [state] = CA)';
+      const exp = '(2 + [day of birth] / 2 - 1) * 2 > 24) or [state] = CA)';
       expect(() => evaluator.parse(ruleName, exp)).toThrow(new InvalidExpError(exp));
     });
 
     test('expression error operators', () => {
       const ruleName = 'expression error operators';
-      const exp = ' and ((2 + [day of birth]/2 - 1)*2 > 24) or ([state] = CA)';
+      const exp = ' and ((2 + [day of birth] / 2 - 1) * 2 > 24) or ([state] = CA)';
       expect(() => evaluator.parse(ruleName, exp)).toThrow(new InvalidExpError(exp));
     });
   });

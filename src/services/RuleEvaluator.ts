@@ -30,35 +30,35 @@ type Operators = Map<string, Operator>
 
 const defaultOperators: Operators = new Map();
 
-defaultOperators.set('+', {
+defaultOperators.set(' + ', {
   priority: 0,
   operate: (left: any, right: any) => parseFloat(left) + parseFloat(right)
 });
-defaultOperators.set('-', {
+defaultOperators.set(' - ', {
   priority: 0,
   operate: (left: any, right: any) => parseFloat(left) - parseFloat(right)
 });
-defaultOperators.set('*', {
+defaultOperators.set(' * ', {
   priority: -1,
   operate: (left: any, right: any) => parseFloat(left) * parseFloat(right)
 });
-defaultOperators.set('/', {
+defaultOperators.set(' / ', {
   priority: -1,
   operate: (left: any, right: any) => parseFloat(left) / parseFloat(right)
 });
-defaultOperators.set('=', {
+defaultOperators.set(' = ', {
   priority: 1,
   operate: (left: any, right: any) => (toNumOrStr(left) === toNumOrStr(right))
 });
-defaultOperators.set('!=', {
+defaultOperators.set(' != ', {
   priority: 1,
   operate: (left: any, right: any) => (toNumOrStr(left) !== toNumOrStr(right))
 });
-defaultOperators.set('>', {
+defaultOperators.set(' > ', {
   priority: 1,
   operate: (left: any, right: any) => (toNumOrStr(left) > toNumOrStr(right))
 });
-defaultOperators.set('<', {
+defaultOperators.set(' < ', {
   priority: 1,
   operate: (left: any, right: any) => (toNumOrStr(left) < toNumOrStr(right))
 });
